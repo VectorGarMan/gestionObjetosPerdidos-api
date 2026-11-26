@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Fotografías subidas (solo se versionan las de los datos de prueba) ###
+uploads/objetos/*
+!uploads/objetos/objeto_0*

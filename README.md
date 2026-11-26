@@ -7,26 +7,47 @@ parcial, sobre la base de datos PostgreSQL de `database/base_datos_proyecto.sql`
 ## Requisitos
 
 - JDK 21
-- PostgreSQL 14 o superior con la base `objetos_perdidos` creada con `database/base_datos_proyecto.sql`
-  (sigue el «PASO 0» del encabezado del script).
+- PostgreSQL 14 o superior instalado en tu computadora (con pgAdmin 4 es lo más fácil).
+
+## Base de datos local
+
+1. En pgAdmin, sobre *Databases* → *Create* → *Database…*, crea `objetos_perdidos`
+   (en *Definition*: Encoding `UTF8`, Template `template0`).
+2. Clic derecho en `objetos_perdidos` → *Query Tool*, abre `database/base_datos_proyecto.sql` y ejecútalo
+   completo (F5). Debe terminar sin errores y mostrar las consultas de verificación.
+
+Con psql sería:
+
+```cmd
+psql -U postgres -c "CREATE DATABASE objetos_perdidos WITH ENCODING 'UTF8' TEMPLATE template0"
+psql -U postgres -d objetos_perdidos -f database/base_datos_proyecto.sql
+```
+
+El script se puede volver a ejecutar para dejar los datos de prueba como al inicio.
 
 ## Variables de entorno
 
 | Variable | Obligatoria | Ejemplo / valor por defecto |
 |---|---|---|
-| `spring_datasource_url` | Sí | `jdbc:postgresql://localhost:5432/objetos_perdidos` (Azure: agrega `?sslmode=require`) |
-| `spring_datasource_username` | Sí | `postgres` |
-| `spring_datasource_password` | Sí | — |
+| `spring_datasource_password` | Sí | La contraseña de tu usuario `postgres` local |
+| `spring_datasource_url` | No | `jdbc:postgresql://localhost:5432/objetos_perdidos` |
+| `spring_datasource_username` | No | `postgres` |
 | `APP_JWT_SECRET` | Sí | Texto aleatorio de **al menos 32 caracteres** |
 | `APP_UPLOADS_DIR` | No | `uploads` (carpeta donde se guardan las fotografías) |
 | `APP_CORS_ORIGINS` | No | `http://localhost:5173,http://localhost:3000,http://localhost:4200` |
 
 ## Ejecutar
 
-```bash
-./mvnw spring-boot:run      # levanta la API en http://localhost:8080
-./mvnw test                 # pruebas unitarias (no necesitan base de datos)
+Windows (CMD):
+
+```cmd
+set spring_datasource_password=TU_CONTRASEÑA_DE_POSTGRES
+set APP_JWT_SECRET=secreto-local-de-desarrollo-con-32-caracteres-o-mas
+mvnw.cmd spring-boot:run
 ```
+
+Mac / Linux: `export` en lugar de `set` y `./mvnw spring-boot:run`.
+La API queda en http://localhost:8080. Las pruebas (`mvnw.cmd test`) no necesitan base de datos.
 
 En IntelliJ: abre el proyecto, define las variables de entorno en la configuración de ejecución de
 `ObjetosPerdidosApplication` y ejecútala.

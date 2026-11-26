@@ -43,8 +43,10 @@ class TokenServiceTest {
 
         AbstractAuthenticationToken autenticacion = SecurityConfig.convertidorRoles().convert(jwt);
 
+        // Spring Security 7.1 agrega además FACTOR_BEARER (indica que entró con token)
         assertThat(autenticacion.getAuthorities()).extracting(GrantedAuthority::getAuthority)
-                .containsExactly("ROLE_ADMINISTRADOR");
+                .contains("ROLE_ADMINISTRADOR")
+                .doesNotContain("ROLE_ESTUDIANTE");
     }
 
     @Test
